@@ -1,5 +1,11 @@
-python-dotenv
-groq
+PyQt5==5.15.9
+groq==0.13.1
+edge-tts==6.1.9
+pygame==2.5.2
+selenium==4.16.0
+webdriver-manager==4.0.1
+mtranslate==1.8
+python-dotenv==1.0.1
 AppOpener
 pywhatkit
 bs4
@@ -9,9 +15,3 @@ requests
 keyboard
 cohere
 googlesearch-python
-selenium
-mtranslate
-pygame
-edge-tts
-PyQt5
-webdriver-manager

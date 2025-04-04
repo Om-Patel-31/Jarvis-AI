@@ -113,7 +113,6 @@ class ChatSelection(QWidget):
         font.setPointSize(13)
         self.chat_text_edit.setFont(font)
         self.timer = QTimer(self)
-        self.timer.timeout.connect(self)
         self.timer.timeout.connect(self.SpeechRecogText)
         self.timer.start(5)
         self.chat_text_edit.viewport().installEventFilter(self)
@@ -154,60 +153,60 @@ class ChatSelection(QWidget):
                                background: none;
                             }
                             """)
+
+    def SpeechRecogText(self):
+        with open(TempDirectoryPath('Status.data'), "r", encoding='utf-8') as file:
+            messages = file.read()
+            self.label.setText(messages)
+
+    def loadMessages(self):
+        global old_chat_message
         
-        def loadMessages(self):
-            global old_chat_message
+        with open(TempDirectoryPath('Responses.data'), 'r', encoding='utf-8') as file:
+            messages = file.read()
             
-            with open(TempDirectoryPath('Responses.data'), 'r', encoding='utf-8') as file:
-                messages = file.read()
-                
-                if None==messages:
-                    pass
-                
-                elif len(messages) <= 1:
-                    pass
-                
-                elif str(old_chat_message) == str(messages):
-                    pass
-                
-                else:
-                    self.addMessage(message=messages,color='White')
-                    old_chat_message = messages
-        
-        def SpeechRecogText(self):
-            with open(TempDirectoryPath('Status.data'), "r", encoding='utf-8') as file:
-                messages = file.read()
-                self.label.setText(messages)
-                
-        def load_icons(self, path, width=60, height=60):
-            pixmap = QPixmap(path)
-            new_pixmap = pixmap.scaled(width, height)
-            self.icon_label.setPixmap(new_pixmap)
+            if None==messages:
+                pass
             
-        def toggle_icon(self, event=None):
+            elif len(messages) <= 1:
+                pass
             
-            if self.toggled:
-                self.load_icons(GraphicsDirectoryPath("voice.png"), 60, 60)
-                MicButtonInitialed()
+            elif str(old_chat_message) == str(messages):
+                pass
             
             else:
-                self.load_icons(GraphicsDirectoryPath('mic.png'), 60, 60)
-                MicButtonClosed()
-                
-            self.toggled = not self.toggled
+                self.addMessage(message=messages,color='White')
+                old_chat_message = messages
             
-        def addMessage(self, message, color):
-            cursor = self.chat_text_edit.textCursor()
-            format = QTextCharFormat()
-            formatm = QTextBlockFormat()
-            formatm.setTopMargin(10)
-            formatm.setLeftMargin(10)
-            format.setForeground(QColor(color))
-            cursor.setCharFormat(format)
-            cursor.setBlockFormat(formatm)
-            cursor.insertText(message + "\n")
-            self.chat_text_edit.setTextCursor(cursor)
+    def load_icons(self, path, width=60, height=60):
+        pixmap = QPixmap(path)
+        new_pixmap = pixmap.scaled(width, height)
+        self.icon_label.setPixmap(new_pixmap)
+        
+    def toggle_icon(self, event=None):
+        
+        if self.toggled:
+            self.load_icons(GraphicsDirectoryPath("voice.png"), 60, 60)
+            MicButtonInitialed()
+        
+        else:
+            self.load_icons(GraphicsDirectoryPath('mic.png'), 60, 60)
+            MicButtonClosed()
             
+        self.toggled = not self.toggled
+        
+    def addMessage(self, message, color):
+        cursor = self.chat_text_edit.textCursor()
+        format = QTextCharFormat()
+        formatm = QTextBlockFormat()
+        formatm.setTopMargin(10)
+        formatm.setLeftMargin(10)
+        format.setForeground(QColor(color))
+        cursor.setCharFormat(format)
+        cursor.setBlockFormat(formatm)
+        cursor.insertText(message + "\n")
+        self.chat_text_edit.setTextCursor(cursor)
+        
 class InitialScreen(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -315,7 +314,7 @@ class CustomTopBar(QWidget):
         self.maximize_icon = QIcon(GraphicsDirectoryPath('Maximize.png'))
         self.minimize_icon = QIcon(GraphicsDirectoryPath('Minimize.png'))
         self.maximize_button.setIcon(self.maximize_icon)
-        self.minimize_button.setFlat(True)
+        minimize_button.setFlat(True)
         self.maximize_button.setStyleSheet("background-color:white")
         self.maximize_button.clicked.connect(self.maximizeWindow)
         close_button = QPushButton()
